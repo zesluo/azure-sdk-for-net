@@ -1,0 +1,11 @@
+{
+	"name": "testpipeline2",
+	"properties": {
+		"description": "asdfs sdafasdf ",
+		"annotations": [
+			"asfas "
+		],
+		"lastPublishTime": "2021-06-08T05:25:43Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

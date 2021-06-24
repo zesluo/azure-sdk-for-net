@@ -1,0 +1,22 @@
+{
+	"name": "testpipeline6",
+	"properties": {
+		"description": "jhkjh uyiuyj",
+		"activities": [
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			}
+		],
+		"annotations": [
+			"bnmbnm"
+		],
+		"lastPublishTime": "2021-06-08T06:26:42Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

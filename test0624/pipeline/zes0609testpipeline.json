@@ -1,0 +1,22 @@
+{
+	"name": "zes0609testpipeline",
+	"properties": {
+		"description": "ljkh,lbvn vb",
+		"activities": [
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			}
+		],
+		"annotations": [
+			"ag uiolui"
+		],
+		"lastPublishTime": "2021-06-09T04:56:34Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

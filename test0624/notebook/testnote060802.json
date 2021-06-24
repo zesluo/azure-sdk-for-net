@@ -1,0 +1,191 @@
+{
+	"name": "testnote060802",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"metadata": {
+			"language_info": {
+				"name": "python"
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## Dim code build\n",
+					"\n",
+					"basic steps\n",
+					"\n",
+					"new_data = stagedata in dim_layout (sk with default value 0)\n",
+					"\n",
+					"stg_merged = new_data + current_stg (full join -> assign from right, whenright records not found in left\n",
+					"assign from left, when all left records   )\n",
+					"\n",
+					"max_sk = max(current_stg)\n",
+					"\n",
+					"assign_sk = iterate stg_merged(sk = 0) and sk + max_Sk + iteration counter\n",
+					"\n",
+					"final_merged = assign_sk + stg_merged(sk <> 0)\n",
+					"\n",
+					"write back final_merged into dim_file\n",
+					""
+				],
+				"attachments": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"tags": [
+						"parameters"
+					]
+				},
+				"source": [
+					"storage_location  = 'abfss://red@rsgue2fidodsta01.dfs.core.windows.net'\n",
+					"stg_dir     = '/stage/master_recon/'\n",
+					"stg_name    =  'parsed_central_log_partition_by_year_month_sample_ids'"
+				],
+				"attachments": null,
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"\n",
+					"base_path = storage_location + stg_dir\n",
+					"stg_path  = base_path + stg_name\n",
+					"dm_path   = storage_location + '/dm/'\n",
+					"dim_path  = dm_path + 'dim_master_recon_roxie_order_status'\n",
+					""
+				],
+				"attachments": null,
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"# Read Stage File\n",
+					"from pyspark.sql.functions import lit\n",
+					"from pyspark.sql.functions import col\n",
+					"\n",
+					"df_stg_orig = spark.read.format(\"delta\").load(stg_path)   \n",
+					"\n",
+					"df_stg = df_stg_orig.filter((col(\"system_name\") == 'roxie') & ((col(\"response_order_status_code\") != '') | (col(\"response_order_status_code\").isNotNull())))\n",
+					"\n",
+					"#df_stg_roxie = df_stg_orig.where(df_stg_fltr_null.sys = 'roxie')\n",
+					"#df_stg_fltr_null = df_stg_roxie.where(df_stg_orig.response_processing_status.isNotNull())\n",
+					"#df_stg = df_stg_fltr_null.where(df_stg_fltr_null.response_processing_status != '')\n",
+					"# Read Base File\n",
+					"try:\n",
+					"    df_base = spark.read.format(\"delta\").load(dim_path)   \n",
+					"except:\n",
+					"    from pyspark.sql.types import *\n",
+					"    df_base = spark.createDataFrame(spark.sparkContext.parallelize([(-1, 'UA','UA'), (-2, 'NA','NA')]),\n",
+					"        StructType([      \n",
+					"            StructField('order_status_sk', IntegerType(), True),\n",
+					"            StructField('order_status_cd', StringType(), True),\n",
+					"            StructField('order_status_desc', StringType(), True),\n",
+					"        ])\n",
+					"    )\n",
+					"\n",
+					"# Prep Stage File\n",
+					"from pyspark.sql import functions as F\n",
+					"from pyspark.sql import Window\n",
+					"\n",
+					"\n",
+					"max_id     = df_base.agg({\"order_status_sk\": \"max\"}).collect()[0][\"max(order_status_sk)\"]\n",
+					"if max_id is None:\n",
+					"    max_id = 1\n",
+					"else:\n",
+					"    max_id = max_id+1\n",
+					"df_uniques = df_stg.select(\"response_order_status_code\").dropDuplicates()\n",
+					"# df_new     = df_uniques.toPandas().withColumn('event_code_sk', 0)\n",
+					"df_new = df_uniques.withColumn(\"order_status_sk\",lit(0))\n",
+					"df_uniques.show()\n",
+					"df_new.show()\n",
+					""
+				],
+				"attachments": null,
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"diagram": {
+						"activateDiagramType": 1,
+						"chartConfig": {
+							"category": "bar",
+							"keys": [
+								"order_status_cd"
+							],
+							"values": [
+								"order_status_sk"
+							],
+							"yLabel": "order_status_sk",
+							"xLabel": "order_status_cd",
+							"aggregation": "SUM",
+							"aggByBackend": false
+						},
+						"aggData": "{\"order_status_sk\":{\"100\":3,\"201\":1,\"402\":2,\"NA\":-2,\"UA\":-1}}",
+						"isSummary": false,
+						"previewData": {
+							"filter": null
+						},
+						"isSql": false
+					}
+				},
+				"source": [
+					"from pyspark.sql import functions as F\n",
+					"import pandas as pd\n",
+					"\n",
+					"df_base.registerTempTable('df_dim_base')\n",
+					"df_new.registerTempTable('df_dim_new')\n",
+					"df_merged = spark.sql(\"\"\" SELECT * FROM (SELECT CASE\n",
+					"                WHEN base.order_status_cd != '' THEN base.order_status_sk\n",
+					"                WHEN new.response_order_status_code != '' THEN new.order_status_sk\n",
+					"                ELSE new.order_status_sk\n",
+					"            END AS order_status_sk,\n",
+					"            \n",
+					"            CASE\n",
+					"                WHEN base.order_status_cd != '' THEN base.order_status_cd\n",
+					"                WHEN new.response_order_status_code != '' THEN new.response_order_status_code                    \n",
+					"                ELSE new.response_order_status_code\n",
+					"            END AS order_status_cd,  \n",
+					"\n",
+					"            CASE\n",
+					"                WHEN base.order_status_cd != '' THEN base.order_status_desc\n",
+					"                WHEN new.response_order_status_code != '' and new.response_order_status_code = '100' THEN 'Successful Order'                    \n",
+					"                WHEN new.response_order_status_code != '' and new.response_order_status_code = '201' THEN 'Non Billable'  \n",
+					"                WHEN new.response_order_status_code != '' and new.response_order_status_code = '401' THEN 'Insufficient Data' \n",
+					"                WHEN new.response_order_status_code != '' and new.response_order_status_code = '402' THEN 'Invalid Acct Or Node' \n",
+					"                WHEN new.response_order_status_code != '' and new.response_order_status_code = '403' THEN 'Error From Vendor' \n",
+					"                WHEN new.response_order_status_code != '' and new.response_order_status_code = '404' THEN 'Internal Error' \n",
+					"                WHEN new.response_order_status_code != '' and new.response_order_status_code = '405' THEN 'Gateway Error'  \n",
+					"                ELSE new.response_order_status_code\n",
+					"            END AS order_status_desc\n",
+					"\n",
+					"        FROM df_dim_base base\n",
+					"        FULL OUTER JOIN df_dim_new new\n",
+					"            ON base.order_status_cd = new.response_order_status_code\n",
+					"    ) as main WHERE order_status_sk is not NULL order by order_status_sk\n",
+					"\"\"\")\n",
+					"\n",
+					"df_merged_sk_zero = df_merged.where(\"order_status_sk = 0\")\n",
+					"df_merged_sk_filled = df_merged_sk_zero.withColumn('order_status_sk', F.row_number().over(Window.orderBy(F.monotonically_increasing_id())) + max_id)\n",
+					"\n",
+					"# pd.concat([survey_sub, survey_sub_last10], axis=0)\n",
+					"\n",
+					"df_merged_final = pd.concat([df_merged.where(\"order_status_sk != 0\").toPandas(), df_merged_sk_filled.toPandas()]) \n",
+					"# df_merged.where(\"event_code_sk != 0\") + df_merged_sk_filled\n",
+					"# df_merged_sk_filled.show()\n",
+					"display(df_merged_final)\n",
+					"df_sdf = spark.createDataFrame(df_merged_final)\n",
+					"\n",
+					"df_sdf.write.format(\"delta\").mode(\"overwrite\").save(dim_path)\n",
+					""
+				],
+				"attachments": null,
+				"execution_count": null
+			}
+		]
+	}
+}

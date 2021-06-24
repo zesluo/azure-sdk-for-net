@@ -1,0 +1,7 @@
+{
+	"name": "IntegrationRuntime0219selfhosted0501",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "test"
+	}
+}

@@ -1,0 +1,21 @@
+{
+	"name": "testnote060201",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"metadata": {
+			"language_info": {
+				"name": "python"
+			}
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"tmp=\"hi\""
+				],
+				"execution_count": null
+			}
+		]
+	}
+}
