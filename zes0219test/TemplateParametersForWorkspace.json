@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "zes0219test"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"testlinkedservice_connectionString": {
+			"value": ""
+		},
+		"zes0219test-WorkspaceDefaultSqlServer_connectionString": {
+			"value": ""
+		},
+		"zes0219test-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://chayangstoragewestus2.dfs.core.windows.net"
+		}
+	}
+}
