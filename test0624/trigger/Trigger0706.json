@@ -2,7 +2,7 @@
 	"name": "Trigger0706",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"type": "TumblingWindowTrigger",
 		"typeProperties": {
 			"frequency": "Minute",
