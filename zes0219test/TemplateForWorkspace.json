@@ -22,6 +22,10 @@
 		"zes0219test-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://chayangstoragewestus2.dfs.core.windows.net"
+		},
+		"Trigger0707_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/051ddeca-1ed6-4d8b-ba6f-1ff561e5f3b3/resourceGroups/chayang-test-rg/providers/Microsoft.Storage/storageAccounts/chayangstoragewestus2"
 		}
 	},
 	"variables": {
@@ -1237,6 +1241,37 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/notebooks/notebook_studio_export')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Trigger0707')]",
+			"type": "Microsoft.Synapse/workspaces/triggers",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"description": "gsdg sdg d",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Pipeline1",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/sqldbauditlogs/blobs/",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('Trigger0707_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobDeleted"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/Pipeline1')]"
 			]
 		}
 	]

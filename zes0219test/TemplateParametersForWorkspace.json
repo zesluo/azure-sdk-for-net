@@ -16,6 +16,9 @@
 		},
 		"zes0219test-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://chayangstoragewestus2.dfs.core.windows.net"
+		},
+		"Trigger0707_properties_typeProperties_scope": {
+			"value": "/subscriptions/051ddeca-1ed6-4d8b-ba6f-1ff561e5f3b3/resourceGroups/chayang-test-rg/providers/Microsoft.Storage/storageAccounts/chayangstoragewestus2"
 		}
 	}
 }
