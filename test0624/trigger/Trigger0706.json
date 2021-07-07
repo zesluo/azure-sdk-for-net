@@ -1,6 +1,7 @@
 {
 	"name": "Trigger0706",
 	"properties": {
+		"description": "fssdf ",
 		"annotations": [],
 		"runtimeState": "Started",
 		"type": "TumblingWindowTrigger",
