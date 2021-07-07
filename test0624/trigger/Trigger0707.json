@@ -1,0 +1,25 @@
+{
+	"name": "Trigger0707",
+	"properties": {
+		"description": "gsdg sdg d",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Pipeline1",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/sqldbauditlogs/blobs/",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/051ddeca-1ed6-4d8b-ba6f-1ff561e5f3b3/resourceGroups/chayang-test-rg/providers/Microsoft.Storage/storageAccounts/chayangstoragewestus2",
+			"events": [
+				"Microsoft.Storage.BlobDeleted"
+			]
+		}
+	}
+}
