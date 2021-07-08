@@ -2,7 +2,7 @@
 	"name": "Trigger0708",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipeline": {
 			"pipelineReference": {
 				"referenceName": "Pipeline1",
