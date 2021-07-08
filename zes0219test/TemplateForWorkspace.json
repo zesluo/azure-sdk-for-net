@@ -73,12 +73,23 @@
 				"description": "jhkjh uyiuyj",
 				"activities": [
 					{
-						"name": "Wait1",
-						"type": "Wait",
+						"name": "Notebook3",
+						"type": "SynapseNotebook",
 						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
-							"waitTimeInSeconds": 1
+							"notebook": {
+								"referenceName": "notebook_studio_export",
+								"type": "NotebookReference"
+							},
+							"snapshot": true
 						}
 					}
 				],
@@ -87,7 +98,9 @@
 				],
 				"lastPublishTime": "2021-06-08T06:25:53Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/notebooks/notebook_studio_export')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/testpipeline5')]",
@@ -97,12 +110,23 @@
 				"description": "jhkjh uyiuyj",
 				"activities": [
 					{
-						"name": "Wait1",
-						"type": "Wait",
+						"name": "Notebook4",
+						"type": "SynapseNotebook",
 						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
-							"waitTimeInSeconds": 1
+							"notebook": {
+								"referenceName": "notebook_studio_export",
+								"type": "NotebookReference"
+							},
+							"snapshot": true
 						}
 					}
 				],
@@ -111,7 +135,9 @@
 				],
 				"lastPublishTime": "2021-06-08T06:26:17Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/notebooks/notebook_studio_export')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/testpipeline6')]",
@@ -121,12 +147,23 @@
 				"description": "jhkjh uyiuyj",
 				"activities": [
 					{
-						"name": "Wait1",
-						"type": "Wait",
+						"name": "Notebook5",
+						"type": "SynapseNotebook",
 						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
-							"waitTimeInSeconds": 1
+							"notebook": {
+								"referenceName": "notebook_studio_export",
+								"type": "NotebookReference"
+							},
+							"snapshot": true
 						}
 					}
 				],
@@ -135,7 +172,9 @@
 				],
 				"lastPublishTime": "2021-06-08T06:26:42Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/notebooks/notebook_studio_export')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/zes0609testpipeline')]",
@@ -287,6 +326,13 @@
 				"description": "fssdf ",
 				"annotations": [],
 				"runtimeState": "Stopped",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "testpipeline5",
+						"type": "PipelineReference"
+					},
+					"parameters": {}
+				},
 				"type": "TumblingWindowTrigger",
 				"typeProperties": {
 					"frequency": "Minute",
@@ -300,7 +346,9 @@
 					"dependsOn": []
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/testpipeline5')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/Trigger0707')]",
@@ -317,6 +365,13 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "testpipeline4",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
 					}
 				],
 				"type": "BlobEventsTrigger",
@@ -330,7 +385,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/pipelines/Pipeline1')]"
+				"[concat(variables('workspaceId'), '/pipelines/Pipeline1')]",
+				"[concat(variables('workspaceId'), '/pipelines/testpipeline4')]"
 			]
 		},
 		{
@@ -1296,6 +1352,37 @@
 			},
 			"dependsOn": [],
 			"location": "eastus2euap"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Trigger0708')]",
+			"type": "Microsoft.Synapse/workspaces/triggers",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "Pipeline1",
+						"type": "PipelineReference"
+					},
+					"parameters": {}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Minute",
+					"interval": 15,
+					"startTime": "2021-07-08T12:33:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/Pipeline1')]"
+			]
 		}
 	]
 }
