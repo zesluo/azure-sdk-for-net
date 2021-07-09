@@ -19,6 +19,9 @@
 		},
 		"Trigger0707_properties_typeProperties_scope": {
 			"value": "/subscriptions/051ddeca-1ed6-4d8b-ba6f-1ff561e5f3b3/resourceGroups/chayang-test-rg/providers/Microsoft.Storage/storageAccounts/chayangstoragewestus2"
+		},
+		"Trigger070701_properties_typeProperties_scope": {
+			"value": "/subscriptions/051ddeca-1ed6-4d8b-ba6f-1ff561e5f3b3/resourceGroups/chayang-test-rg/providers/Microsoft.Storage/storageAccounts/chayangstoragewestus2"
 		}
 	}
 }

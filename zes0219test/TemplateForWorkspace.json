@@ -26,6 +26,10 @@
 		"Trigger0707_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/051ddeca-1ed6-4d8b-ba6f-1ff561e5f3b3/resourceGroups/chayang-test-rg/providers/Microsoft.Storage/storageAccounts/chayangstoragewestus2"
+		},
+		"Trigger070701_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/051ddeca-1ed6-4d8b-ba6f-1ff561e5f3b3/resourceGroups/chayang-test-rg/providers/Microsoft.Storage/storageAccounts/chayangstoragewestus2"
 		}
 	},
 	"variables": {
@@ -184,12 +188,23 @@
 				"description": "ljkh,lbvn vb",
 				"activities": [
 					{
-						"name": "Wait1",
-						"type": "Wait",
+						"name": "Notebook7",
+						"type": "SynapseNotebook",
 						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
-							"waitTimeInSeconds": 1
+							"notebook": {
+								"referenceName": "notebook_studio_export",
+								"type": "NotebookReference"
+							},
+							"snapshot": true
 						}
 					}
 				],
@@ -198,7 +213,9 @@
 				],
 				"lastPublishTime": "2021-06-09T04:56:34Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/notebooks/notebook_studio_export')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/zesPipeline')]",
@@ -357,7 +374,7 @@
 			"properties": {
 				"description": "gsdg sdg d",
 				"annotations": [],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -1383,6 +1400,36 @@
 			},
 			"dependsOn": [],
 			"location": "eastus2euap"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Trigger070701')]",
+			"type": "Microsoft.Synapse/workspaces/triggers",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "zes0609testpipeline",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/euap/blobs/",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('Trigger070701_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobDeleted"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/zes0609testpipeline')]"
+			]
 		}
 	]
 }
