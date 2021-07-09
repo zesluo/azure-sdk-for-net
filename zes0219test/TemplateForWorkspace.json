@@ -357,7 +357,7 @@
 			"properties": {
 				"description": "gsdg sdg d",
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
