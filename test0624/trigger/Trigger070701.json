@@ -1,0 +1,17 @@
+{
+	"name": "Trigger070701",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/euap/blobs/",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/051ddeca-1ed6-4d8b-ba6f-1ff561e5f3b3/resourceGroups/chayang-test-rg/providers/Microsoft.Storage/storageAccounts/chayangstoragewestus2",
+			"events": [
+				"Microsoft.Storage.BlobDeleted"
+			]
+		}
+	}
+}
