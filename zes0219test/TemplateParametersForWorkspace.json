@@ -8,11 +8,17 @@
 		"AzureBlobStorage1_connectionString": {
 			"value": ""
 		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
 		"testlinkedservice_connectionString": {
 			"value": ""
 		},
 		"zes0219test-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://chayangstoragewestus2.dfs.core.windows.net"
 		},
 		"zes0219test-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://chayangstoragewestus2.dfs.core.windows.net"
