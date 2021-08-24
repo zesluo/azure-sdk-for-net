@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"notebook": {
-						"referenceName": "notebook_studio_export",
+						"referenceName": "testnote052701",
 						"type": "NotebookReference"
 					},
 					"snapshot": true
