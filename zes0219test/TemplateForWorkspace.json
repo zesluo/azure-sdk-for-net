@@ -31,6 +31,14 @@
 			"type": "string",
 			"defaultValue": "https://chayangstoragewestus2.dfs.core.windows.net"
 		},
+		"zes091007test_properties_typeProperties_serviceEndpoint": {
+			"type": "string",
+			"defaultValue": "https://chayangstoragewestus2.blob.core.windows.net"
+		},
+		"zetest091301_properties_typeProperties_serviceEndpoint": {
+			"type": "string",
+			"defaultValue": "https://chayangstoragewestus2.blob.core.windows.net"
+		},
 		"Trigger0707_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/051ddeca-1ed6-4d8b-ba6f-1ff561e5f3b3/resourceGroups/chayang-test-rg/providers/Microsoft.Storage/storageAccounts/chayangstoragewestus2"
@@ -356,6 +364,45 @@
 				"type": "AzureBlobFS",
 				"typeProperties": {
 					"url": "[parameters('zes0219test-WorkspaceDefaultStorage_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/zes091007test')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"serviceEndpoint": "[parameters('zes091007test_properties_typeProperties_serviceEndpoint')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/zetest091301')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"serviceEndpoint": "[parameters('zetest091301_properties_typeProperties_serviceEndpoint')]",
+					"accountKind": "StorageV2"
 				},
 				"connectVia": {
 					"referenceName": "AutoResolveIntegrationRuntime",
@@ -802,11 +849,7 @@
 								"aggData": "{\"order_status_sk\":{\"100\":3,\"201\":1,\"402\":2,\"NA\":-2,\"UA\":-1}}",
 								"isSummary": false,
 								"previewData": {
-									"filter": null,
-									"table": {
-										"rows": [],
-										"schema": {}
-									}
+									"filter": null
 								},
 								"isSql": false
 							}
@@ -913,15 +956,12 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
-					},
-					"sessionKeepAliveTimeout": 30
+						"memory": 56
+					}
 				},
 				"cells": [
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"tmp=\"hi\""
 						],
@@ -1394,11 +1434,7 @@
 								"aggData": "{\"order_status_sk\":{\"100\":3,\"201\":1,\"402\":2,\"NA\":-2,\"UA\":-1}}",
 								"isSummary": false,
 								"previewData": {
-									"filter": null,
-									"table": {
-										"rows": [],
-										"schema": {}
-									}
+									"filter": null
 								},
 								"isSql": false
 							}
